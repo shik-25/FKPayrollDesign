@@ -149,7 +149,8 @@ public class PayRoll{
                     System.out.println("2. Post a sales Receipt");
                 }
                 System.out.println("3. Post a union charge due.");
-                System.out.println("4. Update user details.");   
+                System.out.println("4. Update user details.");
+                System.out.println("5. Run payroll for today"); 
                 int m = sc.nextInt();
                 if(m == 0){
                     user = null;
@@ -168,6 +169,8 @@ public class PayRoll{
                     Employee.DeductUnionCharges(amount);
                 }else if(m == 4){
                     Employee.updateDetails(user);
+                }else if(m == 5){
+                    Employee.runPayRoll();
                 }
            }
             }

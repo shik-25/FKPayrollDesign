@@ -1,5 +1,8 @@
 import java.util.*; 
 import java.sql.*;
+import java.time.DayOfWeek;
+import java.time.temporal.ChronoField;
+import java.time.LocalDate;
 class Employee {
     String name;
     int mobile_number;
@@ -128,6 +131,86 @@ class Employee {
             }catch(Exception e){
                 System.out.println(e);
             }
+        }
+        public static void runPayRoll(){
+            if(isFriday()){
+                try{Connection connect = database_manager.dbconnect();
+                String query = "Select ID,deductions,amount_pending,balance from employee where type =?";
+                PreparedStatement ps = null;
+                ps = connect.prepareStatement(query);
+                ps.setString(1,"Hourly");
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+                String id = rs.getString("ID");
+                int deductions = rs.getInt("deductions");
+                int amt_pending = rs.getInt("amount_pending");
+                int balance = rs.getInt("balance");
+                try{
+                    //Connection conn = database_manager.dbconnect();
+                    String query1 = "UPDATE employee SET balance = ? ,deductions = ?, amount_pending = ? WHERE ID = ?";
+                    PreparedStatement ps1 = null;
+                    ps1 = connect.prepareStatement(query1);
+                    ps1.setInt(1, amt_pending - deductions + balance);
+                    ps1.setInt(2, 0);
+                    ps1.setInt(3, 0);
+                    ps1.setString(4, id);
+                    ps1.execute();
+                    //conn.close();
+                }catch(Exception e){
+                    System.out.println(e);
+                }
+                }}catch(Exception e){
+                    System.out.println(e);
+                }
+            }if(endOfMonth()){
+                  try { Connection connect = database_manager.dbconnect();
+                String query = "Select ID,salary,deductions,amount_pending,balance from employee where type =?";
+                PreparedStatement ps = null;
+                ps = connect.prepareStatement(query);
+                ps.setString(1,"Salaried");
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+                String id = rs.getString("ID");
+                int sal = rs.getInt("salary");
+                int deductions = rs.getInt("deductions");
+                int amt_pending = rs.getInt("amount_pending");
+                int balance = rs.getInt("balance");
+                try{
+                    //Connection conn = database_manager.dbconnect();
+                    String query1 = "UPDATE employee SET balance = ?, deductions = ?, amount_pending = ? WHERE ID = ?";
+                    PreparedStatement ps1 = null;
+                    ps1 = connect.prepareStatement(query1);
+                    ps1.setInt(1, sal + amt_pending - deductions + balance);
+                    ps1.setInt(2, 0);
+                    ps1.setInt(3, 0);
+                    ps1.setString(4, id);
+                    ps1.execute();
+                    //conn.close();
+                }catch(Exception e){
+                    System.out.println(e);
+                }
+                }}catch(Exception e){
+                    System.out.println(e);
+                }
+            }
+        }
+        public static boolean isFriday(){
+            LocalDate date = LocalDate.now();
+            DayOfWeek day = DayOfWeek.of(date.get(ChronoField.DAY_OF_WEEK));
+            //System.out.println(day);
+            switch (day) {
+             case FRIDAY:
+             return true;
+             default:
+            System.out.println("Not a Friday");
+      }
+            return false;
+        }
+        public static boolean endOfMonth(){
+            Calendar calendar = Calendar.getInstance();
+            System.out.println(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+            //Date date = new Date();
+            return true; 
         }
 }
 class HourlyWorkingEmployee extends Employee {
