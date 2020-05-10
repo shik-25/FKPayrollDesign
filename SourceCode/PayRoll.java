@@ -10,7 +10,35 @@ public class PayRoll{
         String user_name = sc.nextLine();
         System.out.println("Enter password");
         String password = sc.nextLine();
-        return true;
+         try
+            {
+                Connection connect = database_manager.dbconnect();
+                String query ="select PASSWORD from employee where ID=? ";
+                PreparedStatement ps =connect.prepareStatement(query);
+                ps.setString(1,user_name);
+                ResultSet rs=ps.executeQuery();
+                int count=0;
+                String pass=null;
+                while(rs.next()){
+                count++;
+                pass=rs.getString("PASSWORD");
+                }
+                if(count==1){
+                    if(pass.equals(password)){
+                    System.out.println("Welcome "+ user_name);
+                    return true;
+                    }
+                    else
+                    System.out.println("Incorrect password!");
+                }
+                else{
+                    System.out.println("SORRY you need to register!");
+                    return false;
+                }
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        return false;
     }
     public static void register(){
         Scanner sc = new Scanner(System.in);
@@ -69,6 +97,7 @@ public class PayRoll{
           ps.setString(10, Payment_details);
           ps.execute();
           System.out.println("Employee successfully registered");
+          connect.close();
       }catch (java.sql.SQLException e){
           System.out.println(e);
       }
@@ -87,10 +116,10 @@ public class PayRoll{
             Boolean loggedIn = login();
             if(loggedIn){
                 System.out.println("HI");
-                while(true){
+                //while(true){
                 System.out.println("Type a number corresponding to the action you want to perform");
                 System.out.println("1. ");
-            }
+           // }
             }
         }else if(n == 2){
            register();
