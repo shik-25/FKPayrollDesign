@@ -5,6 +5,7 @@ import java.util.*;
 import java.sql.*;
 public class PayRoll{
     static String user= "";
+    static String employee_type= "";
     public static boolean login(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter username");
@@ -14,7 +15,7 @@ public class PayRoll{
          try
             {
                 Connection connect = database_manager.dbconnect();
-                String query ="select PASSWORD from employee where ID=? ";
+                String query ="select PASSWORD,type from employee where ID=? ";
                 PreparedStatement ps =connect.prepareStatement(query);
                 ps.setString(1,user_name);
                 ResultSet rs=ps.executeQuery();
@@ -23,11 +24,13 @@ public class PayRoll{
                 while(rs.next()){
                 count++;
                 pass=rs.getString("PASSWORD");
+                employee_type = rs.getString("type");
                 }
                 if(count==1){
                     if(pass.equals(password)){
                     System.out.println("Welcome "+ user_name);
                     user = user_name;
+                    System.out.println(employee_type);
                     connect.close();
                     return true;
                     }
@@ -40,6 +43,7 @@ public class PayRoll{
             }catch(Exception e){
                 System.out.println(e);
             }
+            employee_type = "";
         return false;
     }
     public static void register(){
@@ -138,12 +142,23 @@ public class PayRoll{
                 System.out.println("Type a number corresponding to the action you want to perform");
                 System.out.println("0. Log out");
                 System.out.println("1. Delete Acount");
+                if(employee_type.equals("Hourly")){
+                    System.out.println("2. Post a time card");
+                }else if(employee_type.equals("Salaried")){
+                    System.out.println("2. Post a sales Receipt");
+                }   
                 int m = sc.nextInt();
                 if(m == 0){
                     user = null;
                     break;
                 }else if(m == 1){
                     delete();
+                }else if(m == 2){
+                    if(employee_type.equals("Hourly")){
+                    HourlyWorkingEmployee.postTimecard(user);
+                }else if(employee_type.equals("Salaried")){
+                    SalariedEmployee.postSalesReciept(user);
+                }  
                 }
            }
             }
