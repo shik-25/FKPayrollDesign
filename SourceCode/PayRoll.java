@@ -20,6 +20,7 @@ public class PayRoll{
         int mobile = sc.nextInt();
         System.out.println("Enter your username");
         String ID = sc.nextLine();
+        ID = sc.nextLine();
         System.out.println("Enter your password");
         String password = sc.nextLine();
         System.out.println("true if you are a union member else type false");
@@ -46,7 +47,8 @@ public class PayRoll{
           ps.setString(1, name);
           ps.setString(2, ID);
           ps.setString(3, password);
-          ps.setString(4, "Hourly");
+          if(employeeType == 1) ps.setString(4, "Hourly");
+          else if(employeeType == 2) ps.setString(4, "Salaried");
           ps.setInt(5, salary);
           ps.setInt(6, comission_rate);
           ps.setBoolean(7, isUnion);
@@ -54,7 +56,7 @@ public class PayRoll{
           ps.execute();
           System.out.println("Employee successfully registered");
       }catch (java.sql.SQLException e){
-          System.out.println("Username Already Taken");
+          System.out.println(e);
       }
       catch(Exception e){
            System.out.println("e");
@@ -83,7 +85,6 @@ public class PayRoll{
             break;
         }
     }
-    Connection connect = database_manager.dbconnect();
     }
 }
 
