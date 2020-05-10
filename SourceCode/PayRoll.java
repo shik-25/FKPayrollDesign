@@ -32,7 +32,19 @@ public class PayRoll{
         System.out.println("Enter your comissionrate");
         int comission_rate = sc.nextInt();
         System.out.println("1 for receiving a paycheck at home, 2 for collecting it yourself and 3 if you want it you want it to be deposited in a bank");
+        String Payment_details="";String pay="collet";
         int PaymentType = sc.nextInt();
+        if(PaymentType == 1){
+        System.out.println("Enter your address");
+        pay="Home";
+        Payment_details = sc.nextLine();
+        Payment_details = sc.nextLine();
+        }else if(PaymentType == 3){
+        System.out.println("Enter your bank account number");
+        Payment_details = sc.nextLine();
+        Payment_details = sc.nextLine();
+        pay="bank";
+        }
 
         if(employeeType == 1){
            HourlyWorkingEmployee emp = new HourlyWorkingEmployee(name, mobile, ID, password, isUnion, salary, PaymentType);
@@ -41,7 +53,7 @@ public class PayRoll{
         }
         try{
           Connection connect = database_manager.dbconnect();
-          String query="insert into employee values(?,?,?,?,?,?,?,?)";
+          String query="insert into employee values(?,?,?,?,?,?,?,?,?,?)";
           PreparedStatement ps=null;
           ps=connect.prepareStatement(query);
           ps.setString(1, name);
@@ -53,6 +65,8 @@ public class PayRoll{
           ps.setInt(6, comission_rate);
           ps.setBoolean(7, isUnion);
           ps.setInt(8, 0);
+          ps.setString(9, pay);
+          ps.setString(10, Payment_details);
           ps.execute();
           System.out.println("Employee successfully registered");
       }catch (java.sql.SQLException e){
