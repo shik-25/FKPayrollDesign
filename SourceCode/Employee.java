@@ -16,6 +16,89 @@ class Employee {
         this.union_member = isUnion;
         this.method_of_payment = PaymentType;
     }
+    public static void updateDetails(String user_name){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter number of your choice :-");
+        System.out.println("1. Update name");
+        System.out.println("2. Update password");
+        System.out.println("3. Update salary/hourly rate");
+        System.out.println("4. Update Comission rate");
+        System.out.println("5. change union member setting");
+        int choice = sc.nextInt();
+        if(choice == 1){
+            System.out.println("enter correct name");
+            String name = sc.nextLine();
+            name = sc.nextLine();
+            try{
+                Connection connect = database_manager.dbconnect();
+                String query = "update employee set name = ? where ID = ?";
+                PreparedStatement ps = null;
+                ps = connect.prepareStatement(query);
+                ps.setString(1, name);
+                ps.setString(2, user_name);
+                ps.execute();
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }else if(choice == 2){
+            System.out.println("enter new password");
+            String pass = sc.nextLine();
+            pass = sc.nextLine();
+            try{
+                Connection connect = database_manager.dbconnect();
+                String query = "update employee set password = ? where ID = ?";
+                PreparedStatement ps = null;
+                ps = connect.prepareStatement(query);
+                ps.setString(1, pass);
+                ps.setString(2, user_name);
+                ps.execute();
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }else if(choice == 3){
+            System.out.println("enter new salary");
+            int salary = sc.nextInt();
+            try{
+                Connection connect = database_manager.dbconnect();
+                String query = "update employee set salary = ? where ID = ?";
+                PreparedStatement ps = null;
+                ps = connect.prepareStatement(query);
+                ps.setInt(1, salary);
+                ps.setString(2, user_name);
+                ps.execute();
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }else if(choice == 4){
+            System.out.println("enter new comission rate");
+            int comm_rate = sc.nextInt();
+            try{
+                Connection connect = database_manager.dbconnect();
+                String query = "update employee set comission_rate = ? where ID = ?";
+                PreparedStatement ps = null;
+                ps = connect.prepareStatement(query);
+                ps.setInt(1, comm_rate);
+                ps.setString(2, user_name);
+                ps.execute();
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }else if(choice == 5){
+            System.out.println("enter 1 if a union member or 0 if not");
+            int union = sc.nextInt();
+            try{
+                Connection connect = database_manager.dbconnect();
+                String query = "update employee set union_member = ? where ID = ?";
+                PreparedStatement ps = null;
+                ps = connect.prepareStatement(query);
+                ps.setInt(1, union);
+                ps.setString(2, user_name);
+                ps.execute();
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }
+    }
         public static void DeductUnionCharges(int amount){
             try{
             Connection connect = database_manager.dbconnect();

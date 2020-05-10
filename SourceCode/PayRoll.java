@@ -128,6 +128,7 @@ public class PayRoll{
             System.out.println("User could not be deleted");
         }
     }
+    
     public static void main(String[] args) {
         System.out.println("..............Welcome to PayRoll...................");
         while(true){
@@ -147,7 +148,8 @@ public class PayRoll{
                 }else if(employee_type.equals("Salaried")){
                     System.out.println("2. Post a sales Receipt");
                 }
-                System.out.println("3. Post a union charge due.");   
+                System.out.println("3. Post a union charge due.");
+                System.out.println("4. Update user details.");   
                 int m = sc.nextInt();
                 if(m == 0){
                     user = null;
@@ -164,6 +166,8 @@ public class PayRoll{
                     System.out.println("Enter amount to be deducted");
                     int amount = sc.nextInt();
                     Employee.DeductUnionCharges(amount);
+                }else if(m == 4){
+                    Employee.updateDetails(user);
                 }
            }
             }
