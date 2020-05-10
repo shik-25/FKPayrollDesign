@@ -4,6 +4,7 @@
 import java.util.*;
 import java.sql.*;
 public class PayRoll{
+    static String user= "";
     public static boolean login(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter username");
@@ -26,6 +27,8 @@ public class PayRoll{
                 if(count==1){
                     if(pass.equals(password)){
                     System.out.println("Welcome "+ user_name);
+                    user = user_name;
+                    connect.close();
                     return true;
                     }
                     else
@@ -33,7 +36,6 @@ public class PayRoll{
                 }
                 else{
                     System.out.println("SORRY you need to register!");
-                    return false;
                 }
             }catch(Exception e){
                 System.out.println(e);
@@ -102,9 +104,25 @@ public class PayRoll{
           System.out.println(e);
       }
       catch(Exception e){
-           System.out.println("e");
+           System.out.println(e);
       }
-
+    }
+    public static void delete(){
+        try{
+            Connection connect = database_manager.dbconnect();
+            String query = "Delete from employee where ID = ?";
+            PreparedStatement ps = null;
+            ps = connect.prepareStatement(query);
+            ps.setString(1, user);
+            ps.execute();
+            System.out.println("User successfully deleted");
+            connect.close();
+        }catch(java.sql.SQLException e){
+            System.out.println(e);
+            }
+            catch(Exception e){
+            System.out.println("User could not be deleted");
+        }
     }
     public static void main(String[] args) {
         System.out.println("..............Welcome to PayRoll...................");
@@ -116,10 +134,18 @@ public class PayRoll{
             Boolean loggedIn = login();
             if(loggedIn){
                 System.out.println("HI");
-                //while(true){
+                while(true){
                 System.out.println("Type a number corresponding to the action you want to perform");
-                System.out.println("1. ");
-           // }
+                System.out.println("0. Log out");
+                System.out.println("1. Delete Acount");
+                int m = sc.nextInt();
+                if(m == 0){
+                    user = null;
+                    break;
+                }else if(m == 1){
+                    delete();
+                }
+           }
             }
         }else if(n == 2){
            register();
