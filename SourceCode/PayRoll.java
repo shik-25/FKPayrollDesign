@@ -57,8 +57,8 @@ public class PayRoll{
         ID = sc.nextLine();
         System.out.println("Enter your password");
         String password = sc.nextLine();
-        System.out.println("true if you are a union member else type false");
-        boolean isUnion = sc.nextBoolean();
+        System.out.println("1 if you are a union member else type 0");
+        int isUnion = sc.nextInt();
         System.out.println("1 for hourly paid employee, 2 for salaried");
         int employeeType = sc.nextInt();        
         System.out.println("Enter your hourly rate or salary");
@@ -81,9 +81,9 @@ public class PayRoll{
         }
 
         if(employeeType == 1){
-           HourlyWorkingEmployee emp = new HourlyWorkingEmployee(name, mobile, ID, password, isUnion, salary, PaymentType);
+          // HourlyWorkingEmployee emp = new HourlyWorkingEmployee(name, mobile, ID, password, isUnion, salary, PaymentType);
         }else{
-           SalariedEmployee emp = new SalariedEmployee(name, mobile, ID, password, isUnion, salary, comission_rate, PaymentType);
+           //SalariedEmployee emp = new SalariedEmployee(name, mobile, ID, password, isUnion, salary, comission_rate, PaymentType);
         }
         try{
           Connection connect = database_manager.dbconnect();
@@ -97,7 +97,7 @@ public class PayRoll{
           else if(employeeType == 2) ps.setString(4, "Salaried");
           ps.setInt(5, salary);
           ps.setInt(6, comission_rate);
-          ps.setBoolean(7, isUnion);
+          ps.setInt(7, isUnion);
           ps.setInt(8, 0);
           ps.setString(9, pay);
           ps.setString(10, Payment_details);
@@ -146,7 +146,8 @@ public class PayRoll{
                     System.out.println("2. Post a time card");
                 }else if(employee_type.equals("Salaried")){
                     System.out.println("2. Post a sales Receipt");
-                }   
+                }
+                System.out.println("3. Post a union charge due.");   
                 int m = sc.nextInt();
                 if(m == 0){
                     user = null;
@@ -159,6 +160,10 @@ public class PayRoll{
                 }else if(employee_type.equals("Salaried")){
                     SalariedEmployee.postSalesReciept(user);
                 }  
+                }else if(m == 3){
+                    System.out.println("Enter amount to be deducted");
+                    int amount = sc.nextInt();
+                    Employee.DeductUnionCharges(amount);
                 }
            }
             }
